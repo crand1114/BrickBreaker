@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package brickgui;
+package studentdrivermp3;
 
+import brickbreakerstudent.BrickBreakerIO;
+import brickbreakerstudent.GameProfiles;
+import brickbreakerstudent.PlayerProfile;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,35 +15,44 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
  *
- * @author CDOGG_000
+ * @author charles randall
  */
-public class BrickGui extends Application {
+public class StudentDriverMP3 extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
+        
+        String configFilename = "brickbreaker.txt";
+        String profileFilename = "brickbreakerprofiles.txt";
+             
+        
+            GameProfiles gameProf=new GameProfiles();
+            PlayerProfile player = new PlayerProfile();
+            BrickBreakerIO.readProfiles(gameProf, profileFilename);
+        
+        
+        
+       Button btn = new Button();
        Button b=new Button();
        Label tlabel=new Label("Create New Profile: ");
        Label plabel=new Label("Select Existing Profile: ");
         TextField text= new TextField();
-        ObservableList<String> profiles= FXCollections.observableArrayList();
-        profiles.add(0, "Profile 1");
-        profiles.add(1, "Profile 2");
-        profiles.add(2, "Profile 3");
-        ListView<String> list=new ListView<>(profiles);
+        ObservableList<PlayerProfile> profiles= FXCollections.observableArrayList();
+        for(int i=0; i<gameProf.getNumProfiles();i++){
+        profiles.add(gameProf.getProflie(i));
+        }
+        ListView<PlayerProfile> list=new ListView<>(profiles);
         list.setOnMouseClicked(new EventHandler<MouseEvent>(){
         
         @Override
@@ -58,41 +70,43 @@ public class BrickGui extends Application {
                 String input= text.getText();
                 
                 if(input.isEmpty()|| profiles.contains(input)){
-                    Alert alert= new Alert(AlertType.ERROR);
+                    Alert alert= new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Could not Create new Profile");
-                    alert.setContentText("Please input a valid username");
+                    alert.setContentText("Please enter a valid username");
                     alert.showAndWait();
                 }else{
-                     Alert alert= new Alert(AlertType.CONFIRMATION);
+                     Alert alert= new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("New Profile");
                     alert.setContentText("Are you sure you want to create the new profile: "+input+"?");
                     alert.showAndWait();
                 }
-                 for(int i=0;i<profiles.size();i++){     
+                 /*for(int i=0;i<profiles.size();i++){     
                     if(profiles.get(i)==null){
                         profiles.add(i,input);
                     }
                     
-                }
+                }*/
                 System.out.println(input);
             }
         });
         
-        GridPane root = new GridPane();
 
+
+
+        
+
+        ProfilePane root = new ProfilePane(profileFilename, configFilename);
+        Scene scene = new Scene(root, 400, 200);      
         root.setHgap(1);
         root.add(btn,7,0);
-       // root.getChildren().add(b);
         root.add(tlabel,5,0);
         root.add(text,6,0);
         root.add(plabel,0,0);
-       root.add(list,0,200);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Brick Breaker Profile Selection");
+        root.add(list,0,200);  
+        primaryStage.setTitle("Brick Breaker");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
     /**
