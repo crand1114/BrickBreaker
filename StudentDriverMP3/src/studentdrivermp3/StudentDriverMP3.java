@@ -37,7 +37,7 @@ public class StudentDriverMP3 extends Application {
         String profileFilename = "brickbreakerprofiles.txt";
              
         ProfilePane pPane = new ProfilePane(profileFilename, configFilename);
-            GameProfiles gameProf=new GameProfiles();
+       
 
             
             pPane.setPrefSize(400, 200);
