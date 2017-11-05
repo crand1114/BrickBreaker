@@ -29,7 +29,7 @@ public class BrickBreakerStudent {
             player.setHighScore(2017);
             gameProf.addProfile(player);
 
-            BrickBreakerIO.writeProfiles(gameProf, "NPfile.txt");//adds the new profile to the list of other profiles and creates new file 
+            BrickBreakerIO.writeProfiles(gameProf, "newfile.txt");//adds the new profile to the list of other profiles and creates new file 
            
            
             

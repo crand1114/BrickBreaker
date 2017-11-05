@@ -68,7 +68,7 @@ public class BrickBreakerIO {
                 gmProf.addProfile(profile);
             }
 
-            System.out.println(gmProf.toString());
+            //System.out.println(gmProf.toString());
         } catch (FileNotFoundException ex) {
             System.out.println("file not read");
             Logger.getLogger(BrickBreakerIO.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
