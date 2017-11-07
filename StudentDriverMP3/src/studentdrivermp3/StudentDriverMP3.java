@@ -40,7 +40,7 @@ public class StudentDriverMP3 extends Application {
        
 
             
-            pPane.setPrefSize(400, 200);
+            pPane.setPrefSize(600, 300);
         
       root.getChildren().add(pPane);
 
