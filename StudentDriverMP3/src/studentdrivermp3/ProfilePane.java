@@ -7,6 +7,7 @@ package studentdrivermp3;
 
 import brickbreakerstudent.BrickBreakerIO;
 import brickbreakerstudent.GameProfiles;
+import brickbreakerstudent.Level;
 import brickbreakerstudent.PlayerProfile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  *
@@ -53,24 +56,55 @@ public class ProfilePane extends GridPane {
         Label plabel = new Label("Select Existing Profile: ");
 
         TextField text = new TextField();
-        ObservableList<String> profileList = FXCollections.observableArrayList();
+        ObservableList<String> profileName = FXCollections.observableArrayList();
+        String name;
         for (int i = 0; i < profiles.getNumProfiles(); i++) {
-
-                profileList.add(profiles.getProfile(i).getName() );
                 
+                profileName.add(profiles.getProfile(i).getName() );
+              name=profileName.get(i);
             
 
         }
-        ListView<String> list = new ListView<>(profileList);
+         
+        ListView<String> list = new ListView<>(profileName);
         list.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
+     
             @Override
             public void handle(MouseEvent event) {
-
-                System.out.println(list.getSelectionModel().getSelectedItem()); //prints the selected profile in the command prompt
+                
+                Stage stage=new Stage();
+                GridPane gpane=new GridPane();
+                gpane.setPrefSize(400, 400);
+                ObservableList<PlayerProfile> profile = FXCollections.observableArrayList();
+                for(int i=0;i<profileName.size();i++){
+                    if(list.getSelectionModel().getSelectedItem().equals(profiles.getProfile(i).getName())){
+                        profile.add(profiles.getProfile(i));
+                    }
+                
+                }
+                
+                ListView<PlayerProfile> stats=new ListView<>(profile);
+                gpane.add(b, 400,400);
+                gpane.add(stats,0,0);
+                Scene scene = new Scene(gpane,400,400);
+                stage.setTitle("Profile Stats");
+                stage.setScene(scene);
+                stage.show();
+               //System.out.println(list.getSelectionModel().getSelectedItems()); //prints the selected profile in the command prompt
             }
         });
-
+        b.setText("Start Game");
+        b.setOnAction(new EventHandler<ActionEvent>(){
+            
+            @Override
+            public void handle(ActionEvent event){
+                startGameBoard();
+            }
+            
+            
+        });
+        
+        
         btn.setText("Create Profile");
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -78,7 +112,7 @@ public class ProfilePane extends GridPane {
             public void handle(ActionEvent event) {
                 String input = text.getText();
 
-                if (input.isEmpty() || profileList.contains(input)) {
+                if (input.isEmpty() || profileName.contains(input)) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Could not Create new Profile");
                     alert.setContentText("Please enter a valid username");
@@ -89,7 +123,7 @@ public class ProfilePane extends GridPane {
                     alert.setContentText("Are you sure you want to create the new profile: " + input + "?");
                     alert.showAndWait();
                     PlayerProfile newPlay= new PlayerProfile(input);
-                    profileList.add(newPlay.getName());
+                    profileName.add(newPlay.getName());
                     
                    profiles.addProfile(newPlay);
                     BrickBreakerIO.writeProfiles(profiles, profileFilename);
@@ -110,4 +144,16 @@ public class ProfilePane extends GridPane {
         this.add(plabel, 0, 0);
         this.add(list, 0, 200);
     }
+ public void startGameBoard() {
+ this.setVisible(false); //do not display the ProfilePane any longer.
+ Level[] level=new Level[0];
+ GameBoard gameBoard = new GameBoard(level, profiles, this.profileFilename);
+ 
+ Scene gameScene = new Scene(gameBoard,800,800);
+ Stage gameStage = new Stage();
+ gameStage.setScene(gameScene);
+ gameStage.setTitle("Brick Breaker");
+ gameStage.show();
+ }
+
 }
