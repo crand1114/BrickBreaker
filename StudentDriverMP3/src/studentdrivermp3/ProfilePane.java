@@ -49,7 +49,7 @@ public class ProfilePane extends GridPane {
        // GameProfiles gameProf = new GameProfiles();
         PlayerProfile player = new PlayerProfile();
         BrickBreakerIO.readProfiles(profiles, profileFilename);
-
+        
         Button btn = new Button();
         Button b = new Button();
         Label tlabel = new Label("Create New Profile: ");
@@ -147,7 +147,8 @@ public class ProfilePane extends GridPane {
  public void startGameBoard() {
  this.setVisible(false); //do not display the ProfilePane any longer.
  Level[] level=new Level[0];
- GameBoard gameBoard = new GameBoard(level, profiles, this.profileFilename);
+ BrickBreakerIO.readConfigFile(configFilename);
+ GameBoard gameBoard = new GameBoard(level, profiles, profileFilename);
  
  Scene gameScene = new Scene(gameBoard,800,800);
  Stage gameStage = new Stage();

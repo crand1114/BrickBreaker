@@ -20,7 +20,6 @@ public class Paddle extends Rectangle{
     private int paWidth;
     public int PADDLE_WIDTH=70;
     public int PADDLE_HEIGHT=10;
-    private double xLoc=350;
  
     
     public Paddle(int paWidth, int paHeight){
@@ -30,14 +29,43 @@ public class Paddle extends Rectangle{
         this.setWidth(PADDLE_WIDTH);
         this.setFill(Color.PURPLE);
         this.setStroke(Color.PURPLE);
-        this.setY(BASE_Y);
-        move(xLoc);
+        
+        move(paWidth/2);
     }
     public void move(double xLoc){
                
-                 this.setX(xLoc);
+                 this.setX(xLoc - PADDLE_WIDTH/2);
+                 this.setY(BASE_Y);
                  
             
+    }
+
+    /**
+     * @return the paHeight
+     */
+    public int getPaHeight() {
+        return paHeight;
+    }
+
+    /**
+     * @param paHeight the paHeight to set
+     */
+    public void setPaHeight(int paHeight) {
+        this.paHeight = paHeight;
+    }
+
+    /**
+     * @return the paWidth
+     */
+    public int getPaWidth() {
+        return paWidth;
+    }
+
+    /**
+     * @param paWidth the paWidth to set
+     */
+    public void setPaWidth(int paWidth) {
+        this.paWidth = paWidth;
     }
     
 }

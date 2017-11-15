@@ -5,6 +5,8 @@
  */
 package studentdrivermp3;
 
+import brickbreakerstudent.BrickBreakerIO;
+import brickbreakerstudent.BrickRow;
 import brickbreakerstudent.GameProfiles;
 import brickbreakerstudent.Level;
 import javafx.event.EventHandler;
@@ -18,20 +20,37 @@ import javafx.scene.layout.BorderPane;
 public class GameBoard extends BorderPane{
     private PlayArea playArea;
     private GameProfiles profiles=new GameProfiles();
-    private int currentLevel=0;
+    private int currentLevel;
     private Level[] levels;
-    private String profilesFilename;
-    private EventHandler<MouseEvent> paddleHandler;
+    private String profileFilename;
+    private PaddleHandler paddleHandler;
     
     
-    public GameBoard(Level[] level, GameProfiles prof, String profFilename){
+    public GameBoard(Level[] level, GameProfiles prof, String profileFilename){
         levels=level;
+        level= new Level[currentLevel];
+        this.profileFilename=profileFilename;
         profiles=prof;
-        profilesFilename=profFilename;
-        Level lvl= new Level();
-        playArea=new PlayArea(700,600,lvl);
-        this.getChildren().add(playArea);
+        BrickRow bk=new BrickRow();
+        Level lvl= new Level(currentLevel,level.length );
+        playArea=new PlayArea(600,700,lvl);
+        this.profileFilename=profileFilename;
+        this.setCenter(playArea);
         this.setOnMouseMoved(paddleHandler);
+        
+        
+    }
+    public class PaddleHandler implements EventHandler<MouseEvent>{
+
+        @Override
+        public void handle(MouseEvent event) {
+           double position = event.getX();
+           
+           if(event.getX()>600||event.getX()<600){
+           System.out.println(event.getX());
+           playArea.movePaddle(event.getX());
+           }
+          }
         
     }
     
