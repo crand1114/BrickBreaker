@@ -146,11 +146,9 @@ public class ProfilePane extends GridPane {
     }
  public void startGameBoard() {
  this.setVisible(false); //do not display the ProfilePane any longer.
- Level[] level=new Level[0];
- BrickBreakerIO.readConfigFile(configFilename);
- GameBoard gameBoard = new GameBoard(level, profiles, profileFilename);
+ GameBoard gameBoard = new GameBoard(BrickBreakerIO.readConfigFile(configFilename), profiles, profileFilename);
  
- Scene gameScene = new Scene(gameBoard,800,800);
+ Scene gameScene = new Scene(gameBoard);
  Stage gameStage = new Stage();
  gameStage.setScene(gameScene);
  gameStage.setTitle("Brick Breaker");

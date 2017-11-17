@@ -15,9 +15,9 @@ import javafx.scene.shape.Rectangle;
  * @author CDOGG_000
  */
 public class Brick extends Rectangle {
-    private int pointValue;
-    public int BRICK_WIDTH=30;
-    public int BRICK_HEIGHT=20;
+    private int pointValue=1;
+    public static int BRICK_WIDTH=30;
+    public static int BRICK_HEIGHT=20;
      
  
     
@@ -26,8 +26,9 @@ public class Brick extends Rectangle {
         this.setWidth(BRICK_WIDTH);
         this.setX(xLoc);
         this.setY(yLoc);
-        this.setStroke(Color.CORAL);
-        this.setFill(Color.CORAL);
+        this.setStroke(Color.GREEN);
+        this.setFill(Color.GREEN);
+       // this.setVisible(true);
     }
 
     /**
