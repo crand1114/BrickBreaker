@@ -29,22 +29,48 @@ public class PlayArea extends Pane {
     private int direction;
     private Random ran= new Random();
     private Level level;
+    private ScorePane score=new ScorePane();
+    
+    
+    
 
 
-    public PlayArea(int paHeight, int paWidth, Level level) {
-        direction= ran.nextInt();
+    public PlayArea(int paHeight, int paWidth, Level level,ScorePane score) {
+        direction=225+ran.nextInt(90);
+        this.score=score;
         this.paHeight = paHeight;
         this.paWidth = paWidth;
         this.setPrefSize(paWidth, paHeight);
         this.level=level;
         createBricks(level);
         pad = new Paddle(paWidth, paHeight);
-        ball= new Ball((int)pad.getX(),(int)pad.getY(), direction);
-        
+        ball= new Ball(paWidth/2,paHeight/2, direction);
+        ball.setVisible(false);
+        //bricks = new Brick[level.getNumBrickRows()][level.getBricksPerRow()];
         this.getChildren().add(pad);
         this.getChildren().add(ball);
-        newBall();
+        //newBall();
 
+    }
+    public void brickCollision(){
+      for(int i=0; i< this.bricks.length;i++){
+          for(int j=0;j<this.bricks[i].length;j++){
+              if(bricks[i][j]==null || !this.bricks[i][j].isVisible()){
+                  continue;
+              }
+              if(ball.getTopEdge()> bricks[i][j].getY()&&ball.getTopEdge()<this.bricks[i][j].getY()+Brick.BRICK_HEIGHT
+                     ||ball.getBottomEdge()>this.bricks[i][j].getY()&&ball.getBottomEdge()<this.bricks[i][j].getY()+Brick.BRICK_HEIGHT){
+                  if(ball.getRightEdge()>this.bricks[i][j].getX()&&ball.getLeftEdge()<this.bricks[i][j].getX()+Brick.BRICK_WIDTH){
+                      bricks[i][j].setVisible(false);
+                      ball.setDirection(360-ball.getDirection());
+                      score.incrementScore(this.bricks[i][j].getPointValue());
+                     
+                  }
+                  
+              }
+          }
+      }
+        
     }
     public Ball getBall(){
         return ball;
@@ -55,27 +81,24 @@ public class PlayArea extends Pane {
     
     public void checkCollisions(){
       if(ball.getBottomEdge()>=pad.getY()&&ball.getRightEdge()>pad.getX()&&ball.getLeftEdge()<pad.getX()+pad.getWidth()){
-          
-          
-         
-         handleCollisions();
-
-    
-}
-     
-     
+         handleCollisions();    
+         // setOnMouseClicked(newBall);
+      }else{
+          brickCollision();
+ 
+     }
                 
     }
  
     private void createBricks(Level level) {
-        bricks = new Brick[level.getNumBrickRows()][level.getBricksPerRow()];
+      bricks = new Brick[level.getNumBrickRows()][level.getBricksPerRow()];
         for (int i = 0; i < level.getNumBrickRows(); i++) {
             BrickRow bkrow = level.getBrickRow(i);
             for (int j = 0; j < level.getBricksPerRow(); j++) {
                 if (bkrow.getBrickMaskValue(j) == true) {
                     bricks[i][j] = new Brick(j * Brick.BRICK_WIDTH, i * Brick.BRICK_HEIGHT);
                     bricks[i][j].setFill(bkrow.getColor());
-                    bricks[i][j].setStroke(bkrow.getColor());
+                   // bricks[i][j].setStroke();
                     this.getChildren().add(bricks[i][j]);
 
                 }
@@ -84,16 +107,25 @@ public class PlayArea extends Pane {
         }
     }
     public void handleCollisions(){
+        if(ball.getBottomEdge()>=pad.getY()&&ball.getRightEdge()>pad.getX()&&ball.getLeftEdge()<pad.getX()+pad.getWidth()){
                 ball.setCenterY(pad.getY()-(ball.getRadius()+1));
                 ball.setDirection(360-ball.getDirection());
+        }
+
     }
     public void moveBall(){
         ball.move();
     }
     public void newBall(){
-
+    if(!ball.isVisible()){
+        direction=225+ran.nextInt(90);
+        this.ball.setCenterY(this.pad.getY()-ball.getRadius());
+        this.ball.setDirection(direction);
+        this.ball.setCenterX(this.pad.getX()+this.pad.getWidth()/2);
+        this.setBallVisibility(true);
+    }
        
-        setBallVisibility(true);
+      
         
     }
     public void setBallVisibility(Boolean visibility){

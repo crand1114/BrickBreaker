@@ -16,13 +16,15 @@ public class Ball extends Circle {
     private int speed=5;
     private double direction=0;
     private final static double TWO_PI = 2 * Math.PI;
+    private Paddle pad;
     
     
     
     public Ball(int paWidth, int paHeight, double dir){
+        
         this.setRadius(7);
         this.setCenterX(paWidth/2);
-        this.setCenterY(paHeight/2);
+        this.setCenterY(paHeight);
         this.direction=dir;
         this.setFill(Color.RED);
         this.setStroke(Color.RED);
@@ -39,7 +41,7 @@ public int getBottomEdge(){
     return (int)this.getCenterY()+(int)this.getRadius();
 }
 public int getLeftEdge(){
-        return (int)this.getCenterX()-(int)this.getRadius();
+        return (int)this.getCenterX()+(int)this.getRadius();
     }
 public int getRightEdge(){
     return (int)this.getCenterX()+(int)this.getRadius();

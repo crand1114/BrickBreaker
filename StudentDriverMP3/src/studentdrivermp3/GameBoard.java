@@ -35,15 +35,20 @@ public class GameBoard extends BorderPane{
     private Random ran = new Random();
     private Paddle pad;
     private NewBall newBall=new NewBall();
+    private StartBall startBall=new StartBall();
+    private ScorePane score;
     
     
     public GameBoard(Level[] level, GameProfiles prof, String pname){
         //int direction= ran.nextInt();
+        score=new ScorePane();
         levels=level;
         this.profileFilename=pname;
-        profiles=prof;    
-        playArea=new PlayArea(paHeight,paWidth,levels[currentLevel]); 
+        profiles=prof; 
+        this.setTop(score);
+        playArea=new PlayArea(paHeight,paWidth,levels[currentLevel],score); 
         paddleHandler=new PaddleHandler();
+        this.setTop(score);
         this.setCenter(playArea);
         this.setOnMouseMoved(paddleHandler);
         this.setOnMousePressed(newBall);
@@ -60,12 +65,22 @@ public class GameBoard extends BorderPane{
            
           }
     }
+     public class StartBall implements EventHandler<MouseEvent>{
+            @Override
+            public void handle (MouseEvent e){
+
+                timer.start();
+                
+            }
+        }
+    
+    
         public class NewBall implements EventHandler<MouseEvent>{
             @Override
             public void handle (MouseEvent e){
-               // if(ball.getTopEdge()>paHeight){
-               // playArea.newBall();
-                //}
+                timer.stop();
+                    playArea.newBall();
+                
                 timer.start();
                 
             }
@@ -80,33 +95,40 @@ public class GameBoard extends BorderPane{
             pad=playArea.getPad();
             if(now-previous >=20000000){
                 playArea.moveBall();
+                playArea.checkCollisions();
             }
             if(ball.getCenterY()-ball.getRadius()<=0){
                 ball.setCenterY(ball.getRadius()+1);
                 ball.setDirection(360-ball.getDirection());
+
                 
             }
                if(ball.getTopEdge()>paHeight+10){
                 ball.setCenterY(paHeight-(ball.getRadius()+1));
                 ball.setDirection(360-ball.getDirection());
-                timer.stop();
+                ball.setVisible(false);
+
                 setOnMousePressed(newBall);
+               
                 
             }
             
             if(ball.getCenterY()+ball.getRadius()>=pad.getY()){
-                playArea.checkCollisions();
+
 
             }
             
              if(ball.getCenterX()+ball.getRadius()<=0){
+                playArea.brickCollision();
                 ball.setCenterX(ball.getRadius()+1);
                 if(ball.getDirection()<180){
                 ball.setDirection(90+(90-ball.getDirection()));
+               
                  
             }
                 else{
                     ball.setDirection(270+(270-ball.getDirection()));
+
                      
                     
                 }
@@ -115,10 +137,12 @@ public class GameBoard extends BorderPane{
                 ball.setCenterX(paWidth-(ball.getRadius()+1));
                 if(ball.getDirection()<180){
                 ball.setDirection(90+(90-ball.getDirection()));
+                
                  
             }
-                else{
+                else{playArea.brickCollision();
                     ball.setDirection(270+(270-ball.getDirection()));
+                    
                      
                 }
             }
