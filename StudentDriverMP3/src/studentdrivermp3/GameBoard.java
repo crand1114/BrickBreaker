@@ -78,7 +78,7 @@ public class GameBoard extends BorderPane{
         public class NewBall implements EventHandler<MouseEvent>{
             @Override
             public void handle (MouseEvent e){
-                timer.stop();
+                //timer.stop();
                     playArea.newBall();
                 
                 timer.start();
@@ -107,7 +107,7 @@ public class GameBoard extends BorderPane{
                 ball.setCenterY(paHeight-(ball.getRadius()+1));
                 ball.setDirection(360-ball.getDirection());
                 ball.setVisible(false);
-
+                timer.stop();
                 setOnMousePressed(newBall);
                
                 

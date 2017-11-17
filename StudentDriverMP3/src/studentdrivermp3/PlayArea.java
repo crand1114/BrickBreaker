@@ -82,6 +82,7 @@ public class PlayArea extends Pane {
     public void checkCollisions(){
       if(ball.getBottomEdge()>=pad.getY()&&ball.getRightEdge()>pad.getX()&&ball.getLeftEdge()<pad.getX()+pad.getWidth()){
          handleCollisions();    
+         
          // setOnMouseClicked(newBall);
       }else{
           brickCollision();
